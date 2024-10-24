@@ -8,6 +8,8 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         * {
             margin: 0;
@@ -17,7 +19,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff
+            background-color: #ffffff;
             height: 100vh;
             margin: 300px auto;
         }
@@ -61,11 +63,26 @@
             background-position: center;
         }
 
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #00bcd4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 class="title">JS Que</h1>
+    <h1 class="title">JS Queue</h1>
     <div class="queue">
         <div class="person" data-letter="A"></div>
         <div class="person" data-letter="B"></div>
@@ -75,25 +92,45 @@
         <div class="person" data-letter="F"></div>
         <div class="house"></div>
     </div>
+
+    <div class="controls">
+        <button id="toggleButton" class="btn">
+            <i class="fa-regular fa-circle-play" style="font-size: 50px; color: #ffffff;"></i>
+        </button>
+    </div>
 </div>
 
 <script>
     $(document).ready(() => {
         let people = $('.person');
         let letters = ['D', 'E', 'F', 'A', 'B', 'C'];
+        let intervalId;
+        let isRunning = true;
 
         const rotateLetters = () => {
-            let firstLetter = letters.shift();// Remove the first element from the array
-            letters.push(firstLetter);// Add the removed element to the end of the array
+            let firstLetter = letters.shift(); // Remove the first element from the array
+            letters.push(firstLetter); // Add the removed element to the end of the array
 
             people.each((index, person) => {
                 $(person).attr('data-letter', letters[index]);
             });
         };
 
-        setInterval(rotateLetters, 1000);
-    });
+        // Start the queue rotation
+        clearInterval(intervalId);
 
+        // Toggle button to start/stop the queue
+        $('#toggleButton').click(() => {
+            if (isRunning) {
+                clearInterval(intervalId); // Stop the rotation
+                $('#toggleButton').html('<i class="fa-regular fa-circle-play" style="font-size: 50px; color: #ffffff;"></i>');
+            } else {
+                intervalId = setInterval(rotateLetters, 1000); // Start the rotation
+                $('#toggleButton').html('<i class="fa-regular fa-circle-pause" style="font-size: 50px; color: #ffffff;"></i>');
+            }
+            isRunning = !isRunning; // Toggle running state
+        });
+    });
 </script>
 </body>
 </html>
